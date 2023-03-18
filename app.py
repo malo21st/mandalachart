@@ -20,7 +20,7 @@ tr:nth-child(3n) td {
 	border-bottom: 2px solid darkgrey;
 }
 td {
-	border: 1px solid lightgrey;
+	border: 0px solid lightgrey;
 	height: 80px;
 	width: 80px;
 	text-align: center;
