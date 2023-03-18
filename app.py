@@ -89,8 +89,8 @@ def create_mandalachart(title, type_AI):
         temp = 0.9
 # AI
     words_dic, NG_list = dict(), list()
-    words = association_words(KEYWORD, temp, NG_list)[:8]
-    words_dic[KEYWORD] = words
+    words = association_words(title, temp, NG_list)[:8]
+    words_dic[title] = words
     NG_list = words[:]
     for word in words:
         time.sleep(1)
