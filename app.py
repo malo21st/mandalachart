@@ -14,10 +14,10 @@ HEADER = '''<!DOCTYPE html>
 * { box-sizing: border-box; }
 table { margin: 10px; }
 tr:first-child td {
-	border-top: 2px solid black;
+	border-top: 2px solid lightgray;
 }
 tr:nth-child(3n) td {
-	border-bottom: 2px solid black;
+	border-bottom: 2px solid lightgray;
 }
 td {
 	border: 1px solid white;
@@ -27,10 +27,10 @@ td {
     word-wrap: break-word;
 }
 td:first-child {
-	border-left: 2px solid black;
+	border-left: 2px solid lightgray;
 }
 td:nth-child(3n) {
-	border-right: 2px solid black;
+	border-right: 2px solid lightgray;
 }
 td.inner {
 	background-color: aqua;
