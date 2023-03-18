@@ -150,8 +150,8 @@ if st.button('**マンダラート創造**') and title:
 
 if mandala_html:
     st.download_button(
-        label="CSVダウンロード",
+        label="CSVダウンロード【ダウンロードするとマンダラートは消えます】",
         data=mandala_csv,
-        file_name='solution.csv',
+        file_name='mandalachart.csv',
         mime='text/csv',
     )
