@@ -115,8 +115,9 @@ def create_mandalachart(title, type_AI):
     middle = np.concatenate([mdl[4].reshape(3,3), mdl[0].reshape(3,3), mdl[5].reshape(3,3)], 1)
     lower = np.concatenate([mdl[6].reshape(3,3), mdl[7].reshape(3,3), mdl[8].reshape(3,3)], 1)
     mandal = np.concatenate([upper, middle, lower])
-# html create    
+# html create
     html = f'{HEADER}<table id="mandal"><tbody>\n'
+    csv = ""
     for row in mandal:
         html += f'{SP4*1}<tr>\n'
         class_name = ""
@@ -124,9 +125,11 @@ def create_mandalachart(title, type_AI):
             class_name = get_class_name(num)
             blk_row, blk_col = num // 9, num % 9
             html += f'{SP4*2}<td class="{class_name}">{blocks[blk_row][blk_col]}</td>\n'
+            csv += f"'{blocks[blk_row][blk_col]}', "
         html += f'{SP4*1}</tr>\n'
+        csv = csv[:-2] + "\n"
     html += f'</tr></tbody></table>\n{FOOTER}'
-    return html
+    return html, csv
 
 # layout
 st.header("ＡＩが創るマンダラート")
@@ -135,15 +138,20 @@ title = st.text_input("**お題を入力してください :**")
 type_AI = st.radio(
     "**どのＡＩに創らせますか :**",
     ('きっちり', 'まぁまぁ', 'クリエイティブ'), horizontal=True)
-mandala_html = ""
+
+mandala_html, mandala_csv = "", ""
 if st.button('**マンダラート創造**') and title:
     try:
         with st.spinner("マンダラート創造中・・・１分程度お待ちください。"):
-            mandala_html = create_mandalachart(title, type_AI)
+            mandala_html, mandala_csv = create_mandalachart(title, type_AI)
             components.html(mandala_html, width=800, height=800)
     except Exception as err:
         st.error(f'エラーが発生しました。再度お試し下さい。({err=}, {type(err)=}', icon="🚨")
 
 if mandala_html:
-    st.write("データを保存しますか")
-                     
+    st.sidebar.download_button(
+        label="CSVダウンロード",
+        data=mandale_csv,
+        file_name='solution.csv',
+        mime='text/csv',
+    )
