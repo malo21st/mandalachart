@@ -14,23 +14,23 @@ HEADER = '''<!DOCTYPE html>
 * { box-sizing: border-box; }
 table { margin: 10px; }
 tr:first-child td {
-	border-top: 2px solid darkgrey;
+	border-top: 2px solid black;
 }
 tr:nth-child(3n) td {
-	border-bottom: 2px solid darkgrey;
+	border-bottom: 2px solid black;
 }
 td {
-	border: 0px solid lightgrey;
+	border: 1px solid lightgrey;
 	height: 80px;
 	width: 80px;
 	text-align: center;
     word-wrap: break-word;
 }
 td:first-child {
-	border-left: 2px solid darkgrey;
+	border-left: 2px solid black;
 }
 td:nth-child(3n) {
-	border-right: 2px solid darkgrey;
+	border-right: 2px solid black;
 }
 td.inner {
 	background-color: aqua;
