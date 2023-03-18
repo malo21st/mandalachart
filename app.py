@@ -136,8 +136,10 @@ type_AI = st.radio(
     "**どのＡＩに創らせますか :**",
     ('きっちり', 'まぁまぁ', 'クリエイティブ'), horizontal=True)
 if st.button('**マンダラート創造**'):
-    try:
-        with st.spinner("マンダラート創造中・・・"):
-            components.html(title, type_AI, width=800, height=800)
-    except:
-        st.error('エラーが発生しました。再度お試し下さい', icon="🚨")
+    with st.spinner("マンダラート創造中・・・"):
+        components.html(title, type_AI, width=800, height=800)
+#     try:
+#         with st.spinner("マンダラート創造中・・・"):
+#             components.html(title, type_AI, width=800, height=800)
+#     except:
+#         st.error('エラーが発生しました。再度お試し下さい', icon="🚨")
