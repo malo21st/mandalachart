@@ -149,7 +149,7 @@ if st.button('**マンダラート創造**') and title:
     try:
         with st.spinner("マンダラート創造中・・・１分程度お待ちください。"):
             mandala_html, mandala_csv = create_mandalachart(title, type_AI)
-            components.html(mandala_html, width=800, height=800)
+            components.html(mandala_html, width=800, height=850)
     except Exception as err:
         st.error(f'エラーが発生しました。再度お試し下さい。({err=}, {type(err)=}', icon="🚨")
 
