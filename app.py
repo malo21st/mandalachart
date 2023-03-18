@@ -6,8 +6,7 @@ import streamlit.components.v1 as components
 # layout
 st.header("ＡＩが創るマンダラート")
 st.text_input("**お題を入力してください :**")
-components.html(
-    """
+components.html('''
     <body>
     <table id="mandal"><tbody>
         <tr>
@@ -109,6 +108,7 @@ components.html(
             <td class="outer">クレジットカード</td>
             <td class="outer">オンラインショップ</td>
         </tr>
-    </tr></tbody></table>
+    </tr>
+    </tbody></table>
     </body>
-    """
+'''
