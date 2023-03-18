@@ -44,7 +44,6 @@ td.center {
     <title>マンダラート</title>
 </head>
 <body>
-    <h1>マンダラート</h1>
 <table id="mandal"><tbody>
     <tr>
         <td class="outer">イノベーション</td>
