@@ -14,10 +14,10 @@ HEADER = '''<!DOCTYPE html>
 * { box-sizing: border-box; }
 table { margin: 10px; }
 tr:first-child td {
-	border-top-color: black;
+	border-top: 4px solid darkgrey;
 }
 tr:nth-child(3n) td {
-	border-bottom-color: black;
+	border-bottom: 4px solid darkgrey;
 }
 td {
 	border: 1px solid lightgrey;
@@ -27,21 +27,18 @@ td {
     word-wrap: break-word;
 }
 td:first-child {
-	border-left-color: black;
+	border-left: 4px solid darkgrey;
 }
 td:nth-child(3n) {
-	border-right-color: black;
+	border-right: 4px solid darkgrey;
 }
 td.inner {
 	background-color: aqua;
 }
-td.outer {
-	background-color: white;
-}
 td.center {
 	background-color: aqua;
 	font-weight: bold;
-}    
+}
 </style>
     <title>マンダラート</title>
 </head>
