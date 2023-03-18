@@ -135,11 +135,15 @@ title = st.text_input("**お題を入力してください :**")
 type_AI = st.radio(
     "**どのＡＩに創らせますか :**",
     ('きっちり', 'まぁまぁ', 'クリエイティブ'), horizontal=True)
+mandala_html = ""
 if st.button('**マンダラート創造**'):
-    with st.spinner("マンダラート創造中・・・"):
-        components.html(create_mandalachart(title, type_AI), width=800, height=800)
-#     try:
-#         with st.spinner("マンダラート創造中・・・"):
-#             components.html(title, type_AI, width=800, height=800)
-#     except:
-#         st.error('エラーが発生しました。再度お試し下さい', icon="🚨")
+    try:
+        with st.spinner("マンダラート創造中・・・１分程度お待ちください。"):
+            mandala_html = create_mandalachart(title, type_AI)
+            components.html(mandala_html, width=800, height=800)
+    except Exception as err:
+        st.error(f'エラーが発生しました。再度お試し下さい。({err=}, {type(err}=)', icon="🚨")
+
+if mandala_html:
+    st.write("データを保存しますか")
+                     
