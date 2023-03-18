@@ -8,6 +8,7 @@ st.header("ＡＩが創るマンダラート")
 st.text_input("**お題を入力してください :**")
 components.html(
     """
+    <body>
     <table id="mandal"><tbody>
         <tr>
             <td class="outer">イノベーション</td>
@@ -109,4 +110,5 @@ components.html(
             <td class="outer">オンラインショップ</td>
         </tr>
     </tr></tbody></table>
+    </body>
     """
