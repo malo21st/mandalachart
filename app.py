@@ -142,7 +142,7 @@ if st.button('**マンダラート創造**'):
             mandala_html = create_mandalachart(title, type_AI)
             components.html(mandala_html, width=800, height=800)
     except Exception as err:
-        st.error(f'エラーが発生しました。再度お試し下さい。({err=}, {type(err}=)', icon="🚨")
+        st.error(f'エラーが発生しました。再度お試し下さい。({err=}, {type(err)=}', icon="🚨")
 
 if mandala_html:
     st.write("データを保存しますか")
