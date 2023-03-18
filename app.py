@@ -98,16 +98,19 @@ def create_mandalachart(title, type_AI):
         words_dic[word] = ass_words
         NG_list += ass_words
 # data arrange
-    num_key = {num: word for  num, word in enumerate(words_dic)}
+#     num_key = {num: word for  num, word in enumerate(words_dic)}
     blocks = list()
-    for num, key in num_key.items():
-        temp = list()
-        for idx, word in enumerate(words_dic[key]):
-            if idx == 3:
-                temp += [word, key]
-            else:
-                temp += [word]
-        blocks.append(temp)
+    for key, words in words_dic.items():
+        words.insert(4, key)
+        blocks.append(words)
+#     for num, key in num_key.items():
+#         temp = list()
+#         for idx, word in enumerate(words_dic[key]):
+#             if idx == 3:
+#                 temp += [word, key]
+#             else:
+#                 temp += [word]
+#         blocks.append(temp)
 # data arrange mandarchart
     mdl = np.array([num for num in range(81)])
     mdl = mdl.reshape(9, 9)
