@@ -5,7 +5,14 @@ import streamlit.components.v1 as components
 
 # layout
 st.header("ＡＩが創るマンダラート")
-st.text_input("**お題を入力してください :**")
+
+title = st.text_input("**お題を入力してください :**")
+temp = st.radio(
+    "どのＡＩに創らせますか",
+    ('きっちり', 'まぁまぁ', 'クリエイティブ'), horizontal=True)
+if st.button('マンダラートを創らせる'):
+    pass
+
 components.html('''
 <!DOCTYPE html>
 <html lang="ja">
