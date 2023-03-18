@@ -151,7 +151,7 @@ if st.button('**マンダラート創造**') and title:
 if mandala_html:
     st.sidebar.download_button(
         label="CSVダウンロード",
-        data=mandale_csv,
+        data=mandal_csv,
         file_name='solution.csv',
         mime='text/csv',
     )
