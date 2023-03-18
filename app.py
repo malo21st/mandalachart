@@ -136,7 +136,7 @@ type_AI = st.radio(
     "**どのＡＩに創らせますか :**",
     ('きっちり', 'まぁまぁ', 'クリエイティブ'), horizontal=True)
 mandala_html = ""
-if st.button('**マンダラート創造**'):
+if st.button('**マンダラート創造**') and title:
     try:
         with st.spinner("マンダラート創造中・・・１分程度お待ちください。"):
             mandala_html = create_mandalachart(title, type_AI)
