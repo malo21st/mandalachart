@@ -103,7 +103,7 @@ def create_mandalachart(title, type_AI):
         words.insert(4, key)
         blocks.append(words)
 # data arrange mandala
-　　mdl = np.array([num for num in range(81)])
+    mdl = np.array([num for num in range(81)])
     mdl = mdl.reshape(9, 9)
     upper = np.concatenate([mdl[1].reshape(3,3), mdl[2].reshape(3,3), mdl[3].reshape(3,3)], 1)
     middle = np.concatenate([mdl[4].reshape(3,3), mdl[0].reshape(3,3), mdl[5].reshape(3,3)], 1)
