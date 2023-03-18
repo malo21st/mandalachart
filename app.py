@@ -111,4 +111,4 @@ components.html('''
     </tr>
     </tbody></table>
     </body>
-'''
+    ''')
