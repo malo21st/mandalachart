@@ -87,7 +87,7 @@ def create_mandalachart(title, type_AI):
         temp = 0.5
     else: # 'クリエイティブ'
         temp = 0.9
-# AI
+# AI association word
     words_dic, NG_list = dict(), list()
     words = association_words(title, temp, NG_list)[:8]
     words_dic[title] = words
@@ -98,21 +98,12 @@ def create_mandalachart(title, type_AI):
         words_dic[word] = ass_words
         NG_list += ass_words
 # data arrange
-#     num_key = {num: word for  num, word in enumerate(words_dic)}
     blocks = list()
     for key, words in words_dic.items():
         words.insert(4, key)
         blocks.append(words)
-#     for num, key in num_key.items():
-#         temp = list()
-#         for idx, word in enumerate(words_dic[key]):
-#             if idx == 3:
-#                 temp += [word, key]
-#             else:
-#                 temp += [word]
-#         blocks.append(temp)
-# data arrange mandarchart
-    mdl = np.array([num for num in range(81)])
+# data arrange mandala
+　　mdl = np.array([num for num in range(81)])
     mdl = mdl.reshape(9, 9)
     upper = np.concatenate([mdl[1].reshape(3,3), mdl[2].reshape(3,3), mdl[3].reshape(3,3)], 1)
     middle = np.concatenate([mdl[4].reshape(3,3), mdl[0].reshape(3,3), mdl[5].reshape(3,3)], 1)
