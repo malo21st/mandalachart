@@ -56,9 +56,20 @@ st.set_page_config(
 )
 
 def association_words(word, temp, NG_words=[""]):
+    prompt_txt = f"""Answer 10 japanese keywords without NG words that you associate with this word. Answer should be Japanese:
+
+# word: {word}
+
+# NG words: {str([NG_words])[1:-1]}
+
+# format: Python list style with single quotation
+
+Anser:
+"""
+    
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt=f"Answer 8 japanese keywords without NG words that you associate with this word:\n\nword: {word}\n\nNG words: {str([NG_words])[1:-1]}\n\nformat: Python list\n\nAnser:",
+        prompt=prompt_txt,
         temperature=temp,
         max_tokens=500,
         top_p=1.0,
@@ -82,13 +93,13 @@ def get_class_name(num):
 
 def create_mandalachart(title, type_AI):
     if type_AI == 'きっちり':
-        temp = 0.1
+        temp = 0.0
     elif type_AI == 'まぁまぁ':
         temp = 0.5
     else: # 'クリエイティブ'
         temp = 0.9
 # AI association word
-    words_dic, NG_list = dict(), list()
+    words_dic, NG_list = dict(), [title]
     words = association_words(title, temp, NG_list)[:8]
     words_dic[title] = words
     NG_list = words[:]
