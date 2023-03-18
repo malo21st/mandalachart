@@ -86,7 +86,7 @@ def create_mandalachart(title, type_AI):
     elif type_AI == 'まぁまぁ':
         temp = 0.5
     else: # 'クリエイティブ'
-    temp = 0.9
+        temp = 0.9
 # AI
     words_dic, NG_list = dict(), list()
     words = association_words(KEYWORD, temp, NG_list)[:8]
