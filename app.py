@@ -137,7 +137,7 @@ type_AI = st.radio(
     ('きっちり', 'まぁまぁ', 'クリエイティブ'), horizontal=True)
 if st.button('**マンダラート創造**'):
     with st.spinner("マンダラート創造中・・・"):
-        components.html(title, type_AI, width=800, height=800)
+        components.html(create_mandalachart(title, type_AI), width=800, height=800)
 #     try:
 #         with st.spinner("マンダラート創造中・・・"):
 #             components.html(title, type_AI, width=800, height=800)
