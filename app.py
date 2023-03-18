@@ -43,6 +43,9 @@ td:nth-child(3n) {
 td.inner {
 	background-color: aqua;
 }
+td.outer {
+	background-color: white;
+}
 td.center {
 	background-color: aqua;
 	font-weight: bold;
