@@ -149,7 +149,7 @@ if st.button('**マンダラート創造**') and title:
         st.error(f'エラーが発生しました。再度お試し下さい。({err=}, {type(err)=}', icon="🚨")
 
 if mandala_html:
-    st.sidebar.download_button(
+    st.download_button(
         label="CSVダウンロード",
         data=mandala_csv,
         file_name='solution.csv',
