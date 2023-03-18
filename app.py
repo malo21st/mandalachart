@@ -8,9 +8,9 @@ st.header("ＡＩが創るマンダラート")
 
 title = st.text_input("**お題を入力してください :**")
 temp = st.radio(
-    "どのＡＩに創らせますか",
+    "**どのＡＩに創らせますか :**",
     ('きっちり', 'まぁまぁ', 'クリエイティブ'), horizontal=True)
-if st.button('マンダラート創造'):
+if st.button('**マンダラート創造**'):
     pass
 
 components.html('''
