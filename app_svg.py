@@ -154,7 +154,7 @@ def create_mandalachart(title, type_AI):
         })
     svg += '</svg>'
     html = svg_html.safe_substitute({'svg': svg})
-    return html, svg
+    return svg, svg
 
 # layout
 st.header("ＡＩが創るマンダラート")
