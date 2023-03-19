@@ -24,7 +24,7 @@ svg_header = string.Template('''<svg xmlns="http://www.w3.org/2000/svg" width="$
 svg_item = string.Template('''<g transform="translate($x,$y)">
     <rect x="0" y="0" width="80" height="80" fill="$color" stroke="gray"/>
     <foreignObject x="5" y="0" width="70" height="80">
-       <body><div><p>$word</p></div></body>
+       <body xmlns="http://www.w3.org/1999/xhtml"><div><p>$word</p></div></body>
     </foreignObject>
 </g>
 ''')
