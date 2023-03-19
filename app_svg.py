@@ -14,7 +14,7 @@ CENTER = [(1, 1), (1, 4), (1, 7), (4, 1), (4, 7), (7, 1), (7, 4), (7, 7)]
 CENTER_GROUP = [(3, 3), (3, 4), (3, 5), (4, 3), (4, 5), (5, 3), (5, 4), (5, 5)]
 CENTER_OF_GROUP = [(4, 4)]
 # width="$width" height="$height"
-svg_header = string.Template('''<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 720 720">
+svg_header = '''<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 720 720">
 <style>
     div { display: table; font-size: 16px; color: black; width: 70px; height: 80px; }
     p   { display: table-cell; text-align: center; vertical-align: middle;}
@@ -24,7 +24,7 @@ svg_header = string.Template('''<svg xmlns="http://www.w3.org/2000/svg" xmlns:xl
 svg_item = string.Template('''<g transform="translate($x,$y)">
     <rect x="0" y="0" width="80" height="80" fill="$color" stroke="gray"/>
     <foreignObject x="5" y="0" width="70" height="80">
-       <body xmlns="http://www.w3.org/1999/xhtml"><div><p><text>$word</text></p></div></body>
+       <body><div><p><text>$word</text></p></div></body>
     </foreignObject>
 </g>
 ''')
@@ -103,70 +103,55 @@ def get_class_name(num):
     return result
 
 def create_mandalachart(title, type_AI):
-#     if type_AI == 'きっちり':
-#         temp = 0.0
-#     elif type_AI == 'まぁまぁ':
-#         temp = 0.5
-#     else: # 'クリエイティブ'
-#         temp = 0.9
-# # AI association word
-#     words_dic, NG_list = dict(), [title]
-#     words = association_words(title, temp, NG_list)[:8]
-#     words_dic[title] = words
-#     NG_list = words[:]
-#     for word in words:
-#         time.sleep(1)
-#         ass_words = association_words(word, temp, NG_list)[:8]
-#         words_dic[word] = ass_words
-#         NG_list += ass_words
-# # data arrange
-#     blocks = list()
-#     for key, words in words_dic.items():
-#         words.insert(4, key)
-#         blocks.append(words)
-# # create SVG
-#     svg = svg_header.safe_substitute({'width': COL * UNIT, 'height': ROW * UNIT})
-#     csv = ""
-#     for y, row in enumerate(MANDAL_LIST):
-#         row_csv = ""
-#         for x, num in enumerate(row):
-#             word = blocks[num // COL][num % COL]
-#             color = "white"
-#             if (x, y) in CENTER:
-#                 color = "aqua"
-#             elif (x, y) in CENTER_GROUP:
-#                 color = "aqua"
-#             elif (x, y) in CENTER_OF_GROUP:
-#                 color = "pink"
-
-#             svg += svg_item.safe_substitute({
-#                 'x': x * UNIT, 'y': y * UNIT,
-#                 'word': word,
-#                 'color': color,
-#             })
-#             row_csv += f"{word}, "
-#         csv += f"{row_csv[:-2]}\n"
-
-#     unit3 = UNIT * 3
-#     for x, y in ((0, 0), (1, 0), (2, 0), (0, 1), (1, 1), (2, 1), (0, 2), (1, 2), (2, 2)):
-#         svg += svg_frame.safe_substitute({
-#             'x': x * unit3, 'y': y * unit3, 'unit3': unit3
-#         })
-#     svg += '</svg>'
-#     b64 = base64.b64encode(svg.encode('utf-8')).decode("utf-8")
-#     html_img = r'<img src="data:image/svg+xml;base64,%s"/>' % b64
-    csv = ""
+    if type_AI == 'きっちり':
+        temp = 0.0
+    elif type_AI == 'まぁまぁ':
+        temp = 0.5
+    else: # 'クリエイティブ'
+        temp = 0.9
+# AI association word
+    words_dic, NG_list = dict(), [title]
+    words = association_words(title, temp, NG_list)[:8]
+    words_dic[title] = words
+    NG_list = words[:]
+    for word in words:
+        time.sleep(1)
+        ass_words = association_words(word, temp, NG_list)[:8]
+        words_dic[word] = ass_words
+        NG_list += ass_words
+# data arrange
+    blocks = list()
+    for key, words in words_dic.items():
+        words.insert(4, key)
+        blocks.append(words)
+# create SVG
     svg = svg_header.safe_substitute({'width': COL * UNIT, 'height': ROW * UNIT})
-    svg += svg_item.safe_substitute({
-        'x': 0 * UNIT, 'y': 0 * UNIT,
-        'word': "日本語",
-        'color': "yellow",
-    })
-    svg += svg_item.safe_substitute({
-        'x': 1 * UNIT, 'y': 1 * UNIT,
-        'word': "English",
-        'color': "yellow",
-    })
+    csv = ""
+    for y, row in enumerate(MANDAL_LIST):
+        row_csv = ""
+        for x, num in enumerate(row):
+            word = blocks[num // COL][num % COL]
+            color = "white"
+            if (x, y) in CENTER:
+                color = "aqua"
+            elif (x, y) in CENTER_GROUP:
+                color = "aqua"
+            elif (x, y) in CENTER_OF_GROUP:
+                color = "pink"
+
+            svg += svg_item.safe_substitute({
+                'x': x * UNIT, 'y': y * UNIT,
+                'word': word,
+                'color': color,
+            })
+            row_csv += f"{word}, "
+        csv += f"{row_csv[:-2]}\n"
+
+    unit3 = UNIT * 3
+    for x, y in ((0, 0), (1, 0), (2, 0), (0, 1), (1, 1), (2, 1), (0, 2), (1, 2), (2, 2)):
+        svg += svg_frame.safe_substitute({
+            'x': x * unit3, 'y': y * unit3, 'unit3': unit3
+        })
     svg += '</svg>'
     html = svg_html.safe_substitute({'svg': svg})
     return svg, csv
