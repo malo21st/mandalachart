@@ -19,7 +19,7 @@ svg_header = '''<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.
     div { display: table; font-size: 16px; color: black; width: 70px; height: 80px; }
     p   { display: table-cell; text-align: center; vertical-align: middle;}
 </style>
-''')
+'''
 
 svg_item = string.Template('''<g transform="translate($x,$y)">
     <rect x="0" y="0" width="80" height="80" fill="$color" stroke="gray"/>
@@ -125,7 +125,7 @@ def create_mandalachart(title, type_AI):
         words.insert(4, key)
         blocks.append(words)
 # create SVG
-    svg = svg_header.safe_substitute({'width': COL * UNIT, 'height': ROW * UNIT})
+    svg = svg_header
     csv = ""
     for y, row in enumerate(MANDAL_LIST):
         row_csv = ""
