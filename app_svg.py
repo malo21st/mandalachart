@@ -13,8 +13,8 @@ ROW, COL, UNIT = 9, 9, 80
 CENTER = [(1, 1), (1, 4), (1, 7), (4, 1), (4, 7), (7, 1), (7, 4), (7, 7)]
 CENTER_GROUP = [(3, 3), (3, 4), (3, 5), (4, 3), (4, 5), (5, 3), (5, 4), (5, 5)]
 CENTER_OF_GROUP = [(4, 4)]
-
-svg_header = string.Template('''<svg width="$width" height="$height" viewBox="0 0 720 720">
+# viewBox="0 0 720 720"
+svg_header = string.Template('''<svg width="$width" height="$height">
 <style>
     div { display: table; font-size: 16px; color: black; width: 70px; height: 80px; }
     p   { display: table-cell; text-align: center; vertical-align: middle;}
