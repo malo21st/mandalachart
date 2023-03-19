@@ -150,7 +150,7 @@ if st.button('**マンダラート創造**') and title:
             mandala_html, mandala_csv = create_mandalachart(title, type_AI)
             components.html(mandala_html, width=800, height=850, unsafe_allow_html=True)
     except Exception as err:
-        st.error(f'エラーが発生しました。再度お試し下さい。', icon="🚨") #\n({err=}, {type(err)=}
+        st.error(f'エラーが発生しました。再度お試し下さい。\n({err=}, {type(err)=}', icon="🚨") #\n({err=}, {type(err)=}
 
 if mandala_html:
     st.download_button(
