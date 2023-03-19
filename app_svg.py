@@ -125,11 +125,11 @@ def create_mandalachart(title, type_AI):
             row_csv += f"{word}, "
         csv += f"{row_csv[:-2]}\n"
 
-    unit3 = UNIT * 3
-    for x, y in ((0, 0), (1, 0), (2, 0), (0, 1), (1, 1), (2, 1), (0, 2), (1, 2), (2, 2)):
-        svg += svg_frame.safe_substitute({
-            'x': x * unit3, 'y': y * unit3, 'unit3': unit3
-        })
+#     unit3 = UNIT * 3
+#     for x, y in ((0, 0), (1, 0), (2, 0), (0, 1), (1, 1), (2, 1), (0, 2), (1, 2), (2, 2)):
+#         svg += svg_frame.safe_substitute({
+#             'x': x * unit3, 'y': y * unit3, 'unit3': unit3
+#         })
     svg += '</svg>'
 #     b64 = base64.b64encode(svg.encode('utf-8')).decode("utf-8")
 #     html_img = r'<img src="data:image/svg+xml;base64,%s"/>' % b64
