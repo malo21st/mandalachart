@@ -168,7 +168,7 @@ def create_mandalachart(title, type_AI):
         'color': "yellow",
     })
     svg += '</svg>'
-	html = svg_html.safe_substitute({'svg': svg})
+    html = svg_html.safe_substitute({'svg': svg})
     return svg, csv
 
 # layout
