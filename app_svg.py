@@ -154,7 +154,7 @@ def create_mandalachart(title, type_AI):
         })
     svg += '</svg>'
     html = svg_html.safe_substitute({'svg': svg})
-    return svg, csv
+    return html, svg
 
 # layout
 st.header("ＡＩが創るマンダラート")
@@ -177,6 +177,6 @@ if mandala_html:
     st.download_button(
         label="CSVダウンロード【ダウンロードするとマンダラートは消えます】",
         data=mandala_csv,
-        file_name='mandalachart.csv',
+        file_name='mandalachart.svg',
         mime='text/csv',
     )
