@@ -131,9 +131,9 @@ def create_mandalachart(title, type_AI):
             'x': x * unit3, 'y': y * unit3, 'unit3': unit3
         })
     svg += '</svg>'
-    b64 = base64.b64encode(svg.encode('utf-8')).decode("utf-8")
-    html_img = r'<img src="data:image/svg+xml;base64,%s"/>' % b64
-    return html_img, csv
+#     b64 = base64.b64encode(svg.encode('utf-8')).decode("utf-8")
+#     html_img = r'<img src="data:image/svg+xml;base64,%s"/>' % b64
+    return svg, csv
 
 # layout
 st.header("ＡＩが創るマンダラート")
@@ -147,8 +147,8 @@ mandala_html, mandala_csv = "", ""
 if st.button('**マンダラート創造**') and title:
     try:
         with st.spinner("マンダラート創造中・・・30秒～数分程度お待ちください。"):
-            mandala_html, mandala_csv = create_mandalachart(title, type_AI)
-            st.write(mandala_html, unsafe_allow_html=True)
+            mandala_svg, mandala_csv = create_mandalachart(title, type_AI)
+            st.Image(mandala_svg)
     except Exception as err:
         st.error(f'エラーが発生しました。再度お試し下さい。\n({err=}, {type(err)=}', icon="🚨") #\n({err=}, {type(err)=}
 
