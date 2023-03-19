@@ -13,8 +13,8 @@ ROW, COL, UNIT = 9, 9, 80
 CENTER = [(1, 1), (1, 4), (1, 7), (4, 1), (4, 7), (7, 1), (7, 4), (7, 7)]
 CENTER_GROUP = [(3, 3), (3, 4), (3, 5), (4, 3), (4, 5), (5, 3), (5, 4), (5, 5)]
 CENTER_OF_GROUP = [(4, 4)]
-# viewBox="0 0 720 720"
-svg_header = string.Template('''<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="$width" height="$height">
+# width="$width" height="$height"
+svg_header = string.Template('''<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 720 720">
 <style>
     div { display: table; font-size: 16px; color: black; width: 70px; height: 80px; }
     p   { display: table-cell; text-align: center; vertical-align: middle;}
@@ -146,6 +146,23 @@ def create_mandalachart(title, type_AI):
         'color': "yellow",
     })
     svg += '</svg>'
+    html = f'''
+<style>
+.svg__container { 
+	position: relative;
+	width: 100%;
+}
+.svg__content { 
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+</style>
+<body>
+<div class="svg__container">
+{svg}
+</div></body>
+    '''
     return svg, csv
 
 # layout
@@ -160,8 +177,8 @@ mandala_html, mandala_csv = "", ""
 if st.button('**マンダラート創造**') and title:
     try:
         with st.spinner("マンダラート創造中・・・30秒～数分程度お待ちください。"):
-            mandala_svg, mandala_csv = create_mandalachart(title, type_AI)
-            st.image(mandala_svg)
+            mandala_html, mandala_csv = create_mandalachart(title, type_AI)
+            components.html(mandala_html, height=850)
     except Exception as err:
         st.error(f'エラーが発生しました。再度お試し下さい。\n({err=}, {type(err)=}', icon="🚨") #\n({err=}, {type(err)=}
 
