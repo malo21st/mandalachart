@@ -50,6 +50,16 @@ td.center {
 FOOTER  = '</body>\n</html>'
 SP4 = "    "
 
+MANDAL_LIST = [[ 9, 10, 11, 18, 19, 20, 27, 28, 29],
+               [12, 13, 14, 21, 22, 23, 30, 31, 32],
+               [15, 16, 17, 24, 25, 26, 33, 34, 35],
+               [36, 37, 38,  0,  1,  2, 45, 46, 47],
+               [39, 40, 41,  3,  4,  5, 48, 49, 50],
+               [42, 43, 44,  6,  7,  8, 51, 52, 53],
+               [54, 55, 56, 63, 64, 65, 72, 73, 74],
+               [57, 58, 59, 66, 67, 68, 75, 76, 77],
+               [60, 61, 62, 69, 70, 71, 78, 79, 80]]
+
 st.set_page_config(
     page_title = "ＡＩマンダラート",
 #     page_icon = Image.open("favicon.png")
@@ -82,13 +92,8 @@ Anser:
 
 def get_class_name(num):
     result = ""
-    if num < 9:
-        result += "inner"
-    else:
-        result += "outer"
-
-    if num in range(4, 81, 9):
-        result += " center"
+    result += "inner" if num < 9 else "outer"
+    result += " center"  if num in range(4, 81, 9) else ""
     return result
 
 def create_mandalachart(title, type_AI):
@@ -113,17 +118,9 @@ def create_mandalachart(title, type_AI):
     for key, words in words_dic.items():
         words.insert(4, key)
         blocks.append(words)
-# data arrange mandala
-    mdl = np.array([num for num in range(81)])
-    mdl = mdl.reshape(9, 9)
-    upper = np.concatenate([mdl[1].reshape(3,3), mdl[2].reshape(3,3), mdl[3].reshape(3,3)], 1)
-    middle = np.concatenate([mdl[4].reshape(3,3), mdl[0].reshape(3,3), mdl[5].reshape(3,3)], 1)
-    lower = np.concatenate([mdl[6].reshape(3,3), mdl[7].reshape(3,3), mdl[8].reshape(3,3)], 1)
-    mandal = np.concatenate([upper, middle, lower])
 # html create
-    html = f'{HEADER}<table id="mandal"><tbody>\n'
-    csv = ""
-    for row in mandal:
+    html, csv = f'{HEADER}<table id="mandal"><tbody>\n', ''
+    for row in MANDAL_LIST:
         html += f'{SP4*1}<tr>\n'
         class_name = ""
         for num in row:
@@ -147,11 +144,11 @@ type_AI = st.radio(
 mandala_html, mandala_csv = "", ""
 if st.button('**マンダラート創造**') and title:
     try:
-        with st.spinner("マンダラート創造中・・・１分程度お待ちください。"):
+        with st.spinner("マンダラート創造中・・・30秒～数分程度お待ちください。"):
             mandala_html, mandala_csv = create_mandalachart(title, type_AI)
             components.html(mandala_html, width=800, height=850)
     except Exception as err:
-        st.error(f'エラーが発生しました。再度お試し下さい。\n({err=}, {type(err)=}', icon="🚨")
+        st.error(f'エラーが発生しました。再度お試し下さい。', icon="🚨") #\n({err=}, {type(err)=}
 
 if mandala_html:
     st.download_button(
