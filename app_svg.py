@@ -34,6 +34,28 @@ svg_frame = string.Template('''<g transform="translate($x,$y)">
 </g>
 ''')
 
+svg_html = string.Template('''
+<html>
+<head>
+<style>
+.svg__container { 
+	position: relative;
+	width: 100%;
+}
+.svg__content { 
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+</style>
+</head>
+<body>
+<div class="svg__container">
+$svg
+</div>
+</body></html>
+''')
+
 MANDAL_LIST = [[ 9, 10, 11, 18, 19, 20, 27, 28, 29],
                [12, 13, 14, 21, 22, 23, 30, 31, 32],
                [15, 16, 17, 24, 25, 26, 33, 34, 35],
@@ -146,23 +168,7 @@ def create_mandalachart(title, type_AI):
         'color': "yellow",
     })
     svg += '</svg>'
-    html = f'''
-<style>
-.svg__container { 
-	position: relative;
-	width: 100%;
-}
-.svg__content { 
-	position: absolute;
-	top: 0;
-	left: 0;
-}
-</style>
-<body>
-<div class="svg__container">
-{svg}
-</div></body>
-    '''
+	html = svg_html.safe_substitute({'svg': svg})
     return svg, csv
 
 # layout
