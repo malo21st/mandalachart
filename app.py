@@ -157,7 +157,7 @@ type_AI = st.radio(
 mandala_svg, mandala_svg_output = "", ""
 if st.button('**マンダラート創造**') and title:
     try:
-        with st.spinner("マンダラート創造中・・・30秒～数分程度お待ちください。"):
+        with st.spinner("マンダラート創造中・・・　数分程度お待ちください"):
             mandala_svg, mandala_svg_output = create_mandalachart(title, type_AI)
             components.html(mandala_svg, height=720)
     except Exception as err:
