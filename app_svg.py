@@ -68,7 +68,7 @@ PROMPT = string.Template('''Answer 10 japanese keywords without NG words that yo
 # format: Python list style with single quotation
 
 Anser:
-'''
+''')
 
 def association_words(word, temp, NG_words=[""]):
     prompt_txt = PROMPT.safe_substitute({
