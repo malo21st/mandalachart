@@ -86,11 +86,10 @@ def association_words(word, temp, NG_words=[""]):
 
 def create_mandalachart(theme, type_AI):
 # AI association word
-    words_dic, NG_list = dict(), [theme]
+    temp, NG_list = AI_TYPE[type_AI], [theme]
     words = association_words(theme, temp, NG_list)[:8]
-    words_dic[theme] = words
-    temp = AI_TYPE[type_AI]
-    NG_list = words[:]
+    words_dic = {theme: words}
+    NG_list += words[:]
     for word in words:
         time.sleep(1)
         ass_words = association_words(word, temp, NG_list)[:8]
