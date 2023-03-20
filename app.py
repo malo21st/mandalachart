@@ -3,52 +3,44 @@ import streamlit.components.v1 as components
 import openai
 import time
 import numpy as np
+import string
+import base64
 
 openai.api_key = st.secrets['api_key']
 
-HEADER = '''<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <style>
-* { box-sizing: border-box; }
-table { margin: 10px; }
-tr:first-child td {
-	border-top: 2px solid lightgray;
-}
-tr:nth-child(3n) td {
-	border-bottom: 2px solid lightgray;
-}
-td {
-	border: 1px solid white;
-	height: 80px;
-	width: 80px;
-	text-align: center;
-    word-wrap: break-word;
-}
-td:first-child {
-	border-left: 2px solid lightgray;
-}
-td:nth-child(3n) {
-	border-right: 2px solid lightgray;
-}
-td.inner {
-	background-color: aqua;
-}
-td.outer {
-	background-color: white;
-}
-td.center {
-	background-color: aqua;
-	font-weight: bold;
-}
+ROW, COL, UNIT = 9, 9, 80
+
+CENTER = [(1, 1), (1, 4), (1, 7), (4, 1), (4, 7), (7, 1), (7, 4), (7, 7)]
+CENTER_GROUP = [(3, 3), (3, 4), (3, 5), (4, 3), (4, 5), (5, 3), (5, 4), (5, 5)]
+CENTER_OF_GROUP = [(4, 4)]
+
+svg_header = '''<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 720 720">
+<style>
+    div { display: table; font-size: 16px; color: black; width: 70px; height: 80px; }
+    p   { display: table-cell; text-align: center; vertical-align: middle;}
 </style>
-    <title>マンダラート</title>
-</head>
-<body>
 '''
-FOOTER  = '</body>\n</html>'
-SP4 = "    "
+
+svg_header_output = '''<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="720" height="720">
+<style>
+    foreignObject {font: 16px sans-serif; x: 2px; y: -8px; width: 72px; height: 80px; text-align: left; word-wrap: break-word;}
+    div { display: table; font-size: 16px; color: black; width: 70px; height: 80px;}
+    p   { display: table-cell; text-align: left; vertical-align: middle;}
+</style>
+'''
+
+svg_item = string.Template('''<g transform="translate($x,$y)">
+    <rect x="0" y="0" width="80" height="80" fill="$color" stroke="gray"/>
+    <foreignObject x="5" y="0" width="70" height="80">
+       <body xmlns="http://www.w3.org/1999/xhtml"><div><p><text>$word</text></p></div></body>
+    </foreignObject>
+</g>
+''')
+
+svg_frame = string.Template('''<g transform="translate($x,$y)">
+    <rect x="0" y="0" width="$unit3" height="$unit3" fill="white" fill-opacity="0.0" stroke="black"/>
+</g>
+''')
 
 MANDAL_LIST = [[ 9, 10, 11, 18, 19, 20, 27, 28, 29],
                [12, 13, 14, 21, 22, 23, 30, 31, 32],
@@ -118,20 +110,41 @@ def create_mandalachart(title, type_AI):
     for key, words in words_dic.items():
         words.insert(4, key)
         blocks.append(words)
-# html create
-    html, csv = f'{HEADER}<table id="mandal"><tbody>\n', ''
-    for row in MANDAL_LIST:
-        html += f'{SP4*1}<tr>\n'
-        class_name = ""
-        for num in row:
-            class_name = get_class_name(num)
-            blk_row, blk_col = num // 9, num % 9
-            html += f'{SP4*2}<td class="{class_name}">{blocks[blk_row][blk_col]}</td>\n'
-            csv += f"'{blocks[blk_row][blk_col]}', "
-        html += f'{SP4*1}</tr>\n'
-        csv = csv[:-2] + "\n"
-    html += f'</tr></tbody></table>\n{FOOTER}'
-    return html, csv
+# create SVG
+    svg, svg_out = svg_header, svg_header_output
+    for y, row in enumerate(MANDAL_LIST):
+        for x, num in enumerate(row):
+            word = blocks[num // COL][num % COL]
+            color = "white"
+            if (x, y) in CENTER:
+                color = "aqua"
+            elif (x, y) in CENTER_GROUP:
+                color = "aqua"
+            elif (x, y) in CENTER_OF_GROUP:
+                color = "pink"
+
+            svg += svg_item.safe_substitute({
+                'x': x * UNIT, 'y': y * UNIT,
+                'word': word,
+                'color': color,
+            })
+            svg_out += svg_item.safe_substitute({
+                'x': x * UNIT, 'y': y * UNIT,
+                'word': word,
+                'color': color,
+            })
+
+    unit3 = UNIT * 3
+    for x, y in ((0, 0), (1, 0), (2, 0), (0, 1), (1, 1), (2, 1), (0, 2), (1, 2), (2, 2)):
+        svg += svg_frame.safe_substitute({
+            'x': x * unit3, 'y': y * unit3, 'unit3': unit3
+        })
+        svg_out += svg_frame.safe_substitute({
+            'x': x * unit3, 'y': y * unit3, 'unit3': unit3
+        })
+    svg += '</svg>'
+    svg_out += '</svg>'
+    return svg, svg_out
 
 # layout
 st.header("ＡＩが創るマンダラート")
@@ -141,19 +154,19 @@ type_AI = st.radio(
     "**どのＡＩに創らせますか :**",
     ('きっちり', 'まぁまぁ', 'クリエイティブ'), horizontal=True)
 
-mandala_html, mandala_csv = "", ""
+mandala_svg, mandala_svg_output = "", ""
 if st.button('**マンダラート創造**') and title:
     try:
         with st.spinner("マンダラート創造中・・・30秒～数分程度お待ちください。"):
-            mandala_html, mandala_csv = create_mandalachart(title, type_AI)
-            components.html(mandala_html, width=800, height=850)
+            mandala_svg, mandala_svg_output = create_mandalachart(title, type_AI)
+            components.html(mandala_svg, height=720)
     except Exception as err:
-        st.error(f'エラーが発生しました。再度お試し下さい。', icon="🚨") #\n({err=}, {type(err)=}
+        st.error(f'エラーが発生しました。再度お試し下さい。\n({err=}, {type(err)=}', icon="🚨") #\n({err=}, {type(err)=}
 
-if mandala_html:
+if mandala_svg_output:
     st.download_button(
-        label="CSVダウンロード【ダウンロードするとマンダラートは消えます】",
-        data=mandala_csv,
-        file_name='mandalachart.csv',
+        label="svgダウンロード【ダウンロードするとマンダラートは消えます】",
+        data=mandala_svg_output,
+        file_name='mandalachart.svg',
         mime='text/csv',
     )
