@@ -21,10 +21,18 @@ svg_header = '''<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.
 </style>
 '''
 
+svg_header_output = '''<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="720" height="720">
+<style>
+    foreignObject {font: 16px sans-serif; x: 2px; y: -8px; width: 72px; height: 80px; text-align: left; word-wrap: break-word;}
+    div { display: table; font-size: 16px; color: black; width: 70px; height: 80px;}
+    p   { display: table-cell; text-align: left; vertical-align: middle;}
+</style>
+'''
+
 svg_item = string.Template('''<g transform="translate($x,$y)">
     <rect x="0" y="0" width="80" height="80" fill="$color" stroke="gray"/>
     <foreignObject x="5" y="0" width="70" height="80">
-       <body><div><p><text>$word</text></p></div></body>
+       <body xmlns="http://www.w3.org/1999/xhtml"><div><p><text>$word</text></p></div></body>
     </foreignObject>
 </g>
 ''')
@@ -34,27 +42,27 @@ svg_frame = string.Template('''<g transform="translate($x,$y)">
 </g>
 ''')
 
-svg_html = string.Template('''
-<html>
-<head>
-<style>
-.svg__container { 
-	position: relative;
-	width: 100%;
-}
-.svg__content { 
-	position: absolute;
-	top: 0;
-	left: 0;
-}
-</style>
-</head>
-<body>
-<div class="svg__container">
-$svg
-</div>
-</body></html>
-''')
+# svg_html = string.Template('''
+# <html>
+# <head>
+# <style>
+# .svg__container { 
+# 	position: relative;
+# 	width: 100%;
+# }
+# .svg__content { 
+# 	position: absolute;
+# 	top: 0;
+# 	left: 0;
+# }
+# </style>
+# </head>
+# <body>
+# <div class="svg__container">
+# $svg
+# </div>
+# </body></html>
+# ''')
 
 MANDAL_LIST = [[ 9, 10, 11, 18, 19, 20, 27, 28, 29],
                [12, 13, 14, 21, 22, 23, 30, 31, 32],
@@ -125,10 +133,10 @@ def create_mandalachart(title, type_AI):
         words.insert(4, key)
         blocks.append(words)
 # create SVG
-    svg = svg_header
-    csv = ""
+    svg, svg_out = svg_header, svg_header_output
+#     csv = ""
     for y, row in enumerate(MANDAL_LIST):
-        row_csv = ""
+#         row_csv = ""
         for x, num in enumerate(row):
             word = blocks[num // COL][num % COL]
             color = "white"
@@ -144,17 +152,26 @@ def create_mandalachart(title, type_AI):
                 'word': word,
                 'color': color,
             })
-            row_csv += f"{word}, "
-        csv += f"{row_csv[:-2]}\n"
+            svg_out += svg_item.safe_substitute({
+                'x': x * UNIT, 'y': y * UNIT,
+                'word': word,
+                'color': color,
+            })
+#             row_csv += f"{word}, "
+#         csv += f"{row_csv[:-2]}\n"
 
     unit3 = UNIT * 3
     for x, y in ((0, 0), (1, 0), (2, 0), (0, 1), (1, 1), (2, 1), (0, 2), (1, 2), (2, 2)):
         svg += svg_frame.safe_substitute({
             'x': x * unit3, 'y': y * unit3, 'unit3': unit3
         })
+        svg_out += svg_frame.safe_substitute({
+            'x': x * unit3, 'y': y * unit3, 'unit3': unit3
+        })
     svg += '</svg>'
-    html = svg_html.safe_substitute({'svg': svg})
-    return svg, svg
+    svg_out += '</svg>'
+#     html = svg_html.safe_substitute({'svg': svg})
+    return svg, svg_out
 
 # layout
 st.header("ＡＩが創るマンダラート")
@@ -168,15 +185,15 @@ mandala_html, mandala_csv = "", ""
 if st.button('**マンダラート創造**') and title:
     try:
         with st.spinner("マンダラート創造中・・・30秒～数分程度お待ちください。"):
-            mandala_html, mandala_csv = create_mandalachart(title, type_AI)
-            components.html(mandala_html, height=720)
+            mandala_svg, mandala_svg_output = create_mandalachart(title, type_AI)
+            components.html(mandala_svg, height=720)
     except Exception as err:
         st.error(f'エラーが発生しました。再度お試し下さい。\n({err=}, {type(err)=}', icon="🚨") #\n({err=}, {type(err)=}
 
 if mandala_html:
     st.download_button(
-        label="CSVダウンロード【ダウンロードするとマンダラートは消えます】",
-        data=mandala_csv,
+        label="svgダウンロード【ダウンロードするとマンダラートは消えます】",
+        data=mandala_svg_output,
         file_name='mandalachart.svg',
         mime='text/csv',
     )
