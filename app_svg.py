@@ -162,12 +162,13 @@ if st.button('**マンダラート創造**') and title:
             mandala_svg, mandala_svg_output = create_mandalachart(title, type_AI)
             components.html(mandala_svg, height=720)
     except Exception as err:
-        st.error(f'エラーが発生しました。再度お試し下さい。\n({err=}, {type(err)=}', icon="🚨") #\n({err=}, {type(err)=}
+        st.error(f'エラーが発生しました。　再度お試し下さい。')
+        st.error(f'{err=}, {type(err)=}')
 
-if mandala_svg_output:
-    st.download_button(
-        label="svgダウンロード【ダウンロードするとマンダラートは消えます】",
-        data=mandala_svg_output,
-        file_name='mandalachart.svg',
-        mime='text/csv',
-    )
+# if mandala_svg_output:
+#     st.download_button(
+#         label="svgダウンロード【ダウンロードするとマンダラートは消えます】",
+#         data=mandala_svg_output,
+#         file_name='mandalachart.svg',
+#         mime='text/csv',
+#     )
