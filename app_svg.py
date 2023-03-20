@@ -6,41 +6,20 @@ import numpy as np
 import string
 import base64
 
+st.set_page_config(
+    page_title = "ＡＩマンダラート",
+#     page_icon = Image.open("favicon.png")
+)
+
 openai.api_key = st.secrets['api_key']
 
 ROW, COL, UNIT = 9, 9, 80
 
+AI_TYPE = {'きっちり': 0.0, 'まぁまぁ': 0.5, 'クリエイティブ': 0.9}
+
 CENTER = [(1, 1), (1, 4), (1, 7), (4, 1), (4, 7), (7, 1), (7, 4), (7, 7)]
 CENTER_GROUP = [(3, 3), (3, 4), (3, 5), (4, 3), (4, 5), (5, 3), (5, 4), (5, 5)]
 CENTER_OF_GROUP = [(4, 4)]
-
-svg_header = '''<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 720 720">
-<style>
-    div { display: table; font-size: 16px; color: black; width: 70px; height: 80px; }
-    p   { display: table-cell; text-align: center; vertical-align: middle;}
-</style>
-'''
-
-svg_header_output = '''<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="720" height="720">
-<style>
-    foreignObject {font: 16px sans-serif; x: 2px; y: -8px; width: 72px; height: 80px; text-align: left; word-wrap: break-word;}
-    div { display: table; font-size: 16px; color: black; width: 70px; height: 80px;}
-    p   { display: table-cell; text-align: left; vertical-align: middle;}
-</style>
-'''
-
-svg_item = string.Template('''<g transform="translate($x,$y)">
-    <rect x="0" y="0" width="80" height="80" fill="$color" stroke="gray"/>
-    <foreignObject x="5" y="0" width="70" height="80">
-       <body xmlns="http://www.w3.org/1999/xhtml"><div><p><text>$word</text></p></div></body>
-    </foreignObject>
-</g>
-''')
-
-svg_frame = string.Template('''<g transform="translate($x,$y)">
-    <rect x="0" y="0" width="$unit3" height="$unit3" fill="white" fill-opacity="0.0" stroke="black"/>
-</g>
-''')
 
 MANDAL_LIST = [[ 9, 10, 11, 18, 19, 20, 27, 28, 29],
                [12, 13, 14, 21, 22, 23, 30, 31, 32],
@@ -52,22 +31,50 @@ MANDAL_LIST = [[ 9, 10, 11, 18, 19, 20, 27, 28, 29],
                [57, 58, 59, 66, 67, 68, 75, 76, 77],
                [60, 61, 62, 69, 70, 71, 78, 79, 80]]
 
-st.set_page_config(
-    page_title = "ＡＩマンダラート",
-#     page_icon = Image.open("favicon.png")
-)
+SVG_HEADER = '''<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 720 720">
+<style>
+    div { display: table; font-size: 16px; color: black; width: 70px; height: 80px; }
+    p   { display: table-cell; text-align: center; vertical-align: middle;}
+</style>
+'''
 
-def association_words(word, temp, NG_words=[""]):
-    prompt_txt = f"""Answer 10 japanese keywords without NG words that you associate with this word. Answer should be Japanese:
+SVG_HEADER_OUTPUT = '''<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="720" height="720">
+<style>
+    foreignObject {font: 16px sans-serif; x: 2px; y: -8px; width: 72px; height: 80px; text-align: left; word-wrap: break-word;}
+    div { display: table; font-size: 16px; color: black; width: 70px; height: 80px;}
+    p   { display: table-cell; text-align: left; vertical-align: middle;}
+</style>
+'''
 
-# word: {word}
+SVG_ITEM = string.Template('''<g transform="translate($x,$y)">
+    <rect x="0" y="0" width="80" height="80" fill="$color" stroke="gray"/>
+    <foreignObject x="5" y="0" width="70" height="80">
+       <body xmlns="http://www.w3.org/1999/xhtml"><div><p><text>$word</text></p></div></body>
+    </foreignObject>
+</g>
+''')
 
-# NG words: {str([NG_words])[1:-1]}
+SVG_FRAME = string.Template('''<g transform="translate($x,$y)">
+    <rect x="0" y="0" width="$unit3" height="$unit3" fill="white" fill-opacity="0.0" stroke="black"/>
+</g>
+''')
+
+PROMPT = string.Template('''Answer 10 japanese keywords without NG words that you associate with this word. Answer should be Japanese:
+
+# word: $WORD
+
+# NG words: $NG_WORD
 
 # format: Python list style with single quotation
 
 Anser:
-"""
+'''
+
+def association_words(word, temp, NG_words=[""]):
+    prompt_txt = PROMPT.safe_substitute({
+                    'WORD': word,
+                    'NG_WORD': str([NG_words])[1:-1]
+                 })
     
     response = openai.Completion.create(
         model="text-davinci-003",
@@ -89,12 +96,7 @@ def get_class_name(num):
     return result
 
 def create_mandalachart(title, type_AI):
-    if type_AI == 'きっちり':
-        temp = 0.0
-    elif type_AI == 'まぁまぁ':
-        temp = 0.5
-    else: # 'クリエイティブ'
-        temp = 0.9
+    temp = AI_TYPE[type_AI]
 # AI association word
     words_dic, NG_list = dict(), [title]
     words = association_words(title, temp, NG_list)[:8]
@@ -111,7 +113,7 @@ def create_mandalachart(title, type_AI):
         words.insert(4, key)
         blocks.append(words)
 # create SVG
-    svg, svg_out = svg_header, svg_header_output
+    svg, svg_out = SVG_HEADER, SVG_HEADER_OUTPUT
     for y, row in enumerate(MANDAL_LIST):
         for x, num in enumerate(row):
             word = blocks[num // COL][num % COL]
@@ -123,12 +125,12 @@ def create_mandalachart(title, type_AI):
             elif (x, y) in CENTER_OF_GROUP:
                 color = "pink"
 
-            svg += svg_item.safe_substitute({
+            svg += SVG_ITEM.safe_substitute({
                 'x': x * UNIT, 'y': y * UNIT,
                 'word': word,
                 'color': color,
             })
-            svg_out += svg_item.safe_substitute({
+            svg_out += SVG_ITEM.safe_substitute({
                 'x': x * UNIT, 'y': y * UNIT,
                 'word': word,
                 'color': color,
@@ -136,10 +138,10 @@ def create_mandalachart(title, type_AI):
 
     unit3 = UNIT * 3
     for x, y in ((0, 0), (1, 0), (2, 0), (0, 1), (1, 1), (2, 1), (0, 2), (1, 2), (2, 2)):
-        svg += svg_frame.safe_substitute({
+        svg += SVG_FRAME.safe_substitute({
             'x': x * unit3, 'y': y * unit3, 'unit3': unit3
         })
-        svg_out += svg_frame.safe_substitute({
+        svg_out += SVG_FRAME.safe_substitute({
             'x': x * unit3, 'y': y * unit3, 'unit3': unit3
         })
     svg += '</svg>'
@@ -150,9 +152,8 @@ def create_mandalachart(title, type_AI):
 st.header("ＡＩが創るマンダラート")
 
 title = st.text_input("**お題を入力してください :**")
-type_AI = st.radio(
-    "**どのＡＩに創らせますか :**",
-    ('きっちり', 'まぁまぁ', 'クリエイティブ'), horizontal=True)
+type_AI = st.radio("**どのＡＩに創らせますか :**",
+                   ('きっちり', 'まぁまぁ', 'クリエイティブ'), horizontal=True)
 
 mandala_svg, mandala_svg_output = "", ""
 if st.button('**マンダラート創造**') and title:
