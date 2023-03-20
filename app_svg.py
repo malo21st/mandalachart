@@ -17,9 +17,10 @@ ROW, COL, UNIT = 9, 9, 80
 
 AI_TYPE = {'きっちり': 0.0, 'まぁまぁ': 0.5, 'クリエイティブ': 0.9}
 
-CENTER = [(1, 1), (1, 4), (1, 7), (4, 1), (4, 7), (7, 1), (7, 4), (7, 7)]
-CENTER_GROUP = [(3, 3), (3, 4), (3, 5), (4, 3), (4, 5), (5, 3), (5, 4), (5, 5)]
-CENTER_OF_GROUP = [(4, 4)]
+# base, center, center group, outer_center
+C0, C1, C2, C3 = "white", "pink", "aqua", "aqua"
+COLOR = {(4, 4): C1, (3, 3): C2, (3, 4): C2, (3, 5): C2, (4, 3): C2, (4, 5): C2, (5, 3): C2, (5, 4): C2, (5, 5): C2,
+           (1, 1): C3, (1, 4): C3, (1, 7): C3, (4, 1): C3, (4, 7): C3, (7, 1): C3, (7, 4): C3, (7, 7): C3}
 
 MANDAL_LIST = [[ 9, 10, 11, 18, 19, 20, 27, 28, 29],
                [12, 13, 14, 21, 22, 23, 30, 31, 32],
@@ -117,14 +118,7 @@ def create_mandalachart(title, type_AI):
     for y, row in enumerate(MANDAL_LIST):
         for x, num in enumerate(row):
             word = blocks[num // COL][num % COL]
-            color = "white"
-            if (x, y) in CENTER:
-                color = "aqua"
-            elif (x, y) in CENTER_GROUP:
-                color = "aqua"
-            elif (x, y) in CENTER_OF_GROUP:
-                color = "pink"
-
+            color = COLOR.get((x, y), C0)
             svg += SVG_ITEM.safe_substitute({
                 'x': x * UNIT, 'y': y * UNIT,
                 'word': word,
