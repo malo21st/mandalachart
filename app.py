@@ -84,12 +84,12 @@ def association_words(word, temp, NG_words=[""]):
     result = res.replace("’", "'").replace("‘", "'").replace(";", "")
     return eval(result)
 
-def create_mandalachart(title, type_AI):
-    temp = AI_TYPE[type_AI]
+def create_mandalachart(theme, type_AI):
 # AI association word
-    words_dic, NG_list = dict(), [title]
-    words = association_words(title, temp, NG_list)[:8]
-    words_dic[title] = words
+    words_dic, NG_list = dict(), [theme]
+    words = association_words(theme, temp, NG_list)[:8]
+    words_dic[theme] = words
+    temp = AI_TYPE[type_AI]
     NG_list = words[:]
     for word in words:
         time.sleep(1)
