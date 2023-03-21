@@ -84,13 +84,12 @@ def association_words(word, temp, NG_words=[""]):
     result = res.replace("’", "'").replace("‘", "'").replace(";", "")
     return eval(result)
 
-def create_mandalachart(title, type_AI):
-    temp = AI_TYPE[type_AI]
+def create_mandalachart(theme, type_AI):
 # AI association word
-    words_dic, NG_list = dict(), [title]
-    words = association_words(title, temp, NG_list)[:8]
-    words_dic[title] = words
-    NG_list = words[:]
+    temp, NG_list = AI_TYPE[type_AI], [theme]
+    words = association_words(theme, temp, NG_list)[:8]
+    words_dic = {theme: words}
+    NG_list += words[:]
     for word in words:
         time.sleep(1)
         ass_words = association_words(word, temp, NG_list)[:8]
@@ -112,7 +111,7 @@ def create_mandalachart(title, type_AI):
                 'word': word,
                 'color': color,
             })
-
+    # 9 3*3 rectangle
     unit3 = UNIT * 3
     for x, y in ((0, 0), (1, 0), (2, 0), (0, 1), (1, 1), (2, 1), (0, 2), (1, 2), (2, 2)):
         svg += SVG_FRAME.safe_substitute({
@@ -124,15 +123,14 @@ def create_mandalachart(title, type_AI):
 # layout
 st.header("ＡＩが創るマンダラート")
 
-title = st.text_input("**お題を入力してください :**")
+theme = st.text_input("**お題を入力してください :**")
 type_AI = st.radio("**どのＡＩに創らせますか :**",
                    ('きっちり', 'まぁまぁ', 'クリエイティブ'), horizontal=True)
 
-mandala_svg, mandala_svg_output = "", ""
-if st.button('**マンダラート創造**') and title:
+if st.button('**マンダラート創造**') and theme:
     try:
         with st.spinner("マンダラート創造中・・・　数分程度お待ちください。"):
-            mandala_svg = create_mandalachart(title, type_AI)
+            mandala_svg = create_mandalachart(theme, type_AI)
             components.html(mandala_svg, height=720)
     except Exception as err:
         st.error(f'エラーが発生しました。　　再度お試し下さい。')
