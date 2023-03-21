@@ -111,7 +111,7 @@ def create_mandalachart(theme, type_AI):
                 'word': word,
                 'color': color,
             })
-
+    # 9 3*3 rectangle
     unit3 = UNIT * 3
     for x, y in ((0, 0), (1, 0), (2, 0), (0, 1), (1, 1), (2, 1), (0, 2), (1, 2), (2, 2)):
         svg += SVG_FRAME.safe_substitute({
