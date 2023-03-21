@@ -26,7 +26,7 @@ MANDAL_LIST = [[ 9, 10, 11, 18, 19, 20, 27, 28, 29],
                [57, 58, 59, 66, 67, 68, 75, 76, 77],
                [60, 61, 62, 69, 70, 71, 78, 79, 80]]
 
-# Cart Back Ground Color C0: default, C1: center, C2: center group, c3: outer_center
+# Chart Back Ground Color C0: default, C1: center, C2: center group, c3: outer_center
 C0, C1, C2, C3 = "white", "pink", "aqua", "aqua"
 COLOR = {(4, 4): C1, (3, 3): C2, (3, 4): C2, (3, 5): C2, (4, 3): C2, (4, 5): C2, (5, 3): C2, (5, 4): C2, (5, 5): C2,
          (1, 1): C3, (1, 4): C3, (1, 7): C3, (4, 1): C3, (4, 7): C3, (7, 1): C3, (7, 4): C3, (7, 7): C3}
