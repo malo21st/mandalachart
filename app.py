@@ -98,13 +98,14 @@ def create_mandalachart(theme, type_AI):
         NG_list += ass_words
     # data arrange dict => list 9 blocks(3*3)
     blocks = [words.insert(4, key) for key, words in words_dic.items()]
+    st.write(blocks)
 # create SVG
     svg = SVG_HEADER
     for y, row in enumerate(MANDAL_LIST):
         for x, num in enumerate(row):
             word, color = blocks[num // COL][num % COL], COLOR.get((x, y), C0)
             svg += SVG_ITEM.safe_substitute({
-                'x': x * UNIT, 'y': y * UNIT, 'word': word, 'color': color,
+                'x': x*UNIT, 'y': y*UNIT, 'word': word, 'color': color,
             })
     # 9 rectangles(3*3)
     for x, y in ((0, 0), (1, 0), (2, 0), (0, 1), (1, 1), (2, 1), (0, 2), (1, 2), (2, 2)):
