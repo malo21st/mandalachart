@@ -15,7 +15,8 @@ st.set_page_config(
 openai.api_key = st.secrets['api_key']
 
 # Mandal Chart Layout
-ROW, COL, UNIT = 9, 9, 80                           # ROW
+ROW, COL, UNIT = 9, 9, 80
+UNIT3 = UNIT * 3                                    # ROW
 MANDAL_LIST = [[ 9, 10, 11, 18, 19, 20, 27, 28, 29], # 0
                [12, 13, 14, 21, 22, 23, 30, 31, 32], # 1
                [15, 16, 17, 24, 25, 26, 33, 34, 35], # 2
@@ -95,28 +96,19 @@ def create_mandalachart(theme, type_AI):
         ass_words = association_words(word, temp, NG_list)[:8]
         words_dic[word] = ass_words
         NG_list += ass_words
-# data arrange
-    blocks = list()
-    for key, words in words_dic.items():
-        words.insert(4, key)
-        blocks.append(words)
+    # data arrange dict => list 9 blocks(3*3)
+    blocks = [words.insert(4, key) for key, words in words_dic.items()]
 # create SVG
     svg = SVG_HEADER
     for y, row in enumerate(MANDAL_LIST):
         for x, num in enumerate(row):
-            word = blocks[num // COL][num % COL]
-            color = COLOR.get((x, y), C0)
+            word, color = blocks[num // COL][num % COL], COLOR.get((x, y), C0)
             svg += SVG_ITEM.safe_substitute({
-                'x': x * UNIT, 'y': y * UNIT,
-                'word': word,
-                'color': color,
+                'x': x * UNIT, 'y': y * UNIT, 'word': word, 'color': color,
             })
-    # 9 3*3 rectangle
-    unit3 = UNIT * 3
+    # 9 rectangles(3*3)
     for x, y in ((0, 0), (1, 0), (2, 0), (0, 1), (1, 1), (2, 1), (0, 2), (1, 2), (2, 2)):
-        svg += SVG_FRAME.safe_substitute({
-            'x': x * unit3, 'y': y * unit3, 'unit3': unit3
-        })
+        svg += SVG_FRAME.safe_substitute({'x': x*UNIT3, 'y': y*UNIT3, 'unit3': UNIT3})
     svg += '</svg>'
     return svg
 
