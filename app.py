@@ -97,8 +97,8 @@ def create_mandalachart(theme, type_AI):
         words_dic[word] = ass_words
         NG_list += ass_words
     # data arrange dict => list 9 blocks(3*3)
-    blocks = [words.insert(4, key) for key, words in words_dic.items()]
-    st.write(blocks)
+    blocks = [word_lst.insert(4, key) for key, word_lst in words_dic.items()]
+    st.write(words_dic)
 # create SVG
     svg = SVG_HEADER
     for y, row in enumerate(MANDAL_LIST):
