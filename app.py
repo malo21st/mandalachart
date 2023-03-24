@@ -116,7 +116,7 @@ def create_mandalachart(theme, type_AI):
 st.header("ＡＩが創るマンダラート")
 
 theme = st.text_input("**お題を入力してください :**")
-type_AI = st.radio("**どのＡＩに創らせますか :**",
+type_AI = st.radio("**どのＡＩに創造させますか :**",
                    ('きっちり', 'まぁまぁ', 'クリエイティブ'), horizontal=True)
 
 if st.button('**マンダラート創造**') and theme:
