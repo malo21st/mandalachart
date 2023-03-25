@@ -66,7 +66,7 @@ Keywords should be Japanese.
 ''')
 
 def association_words(word, temp, NG_words=[""]):
-    prompt_txt = PROMPT.safe_substitute({
+    request_txt = PROMPT.safe_substitute({
                     'WORD': word,
                     'NG_WORD': str([NG_words])[1:-1]
                  })
