@@ -53,15 +53,16 @@ SVG_FRAME = string.Template('''<g transform="translate($x,$y)">
 ''')
 
 # API PROMPT
-PROMPT = string.Template('''Answer 10 japanese keywords without NG words that you associate with this word. Answer should be Japanese:
+PROMPT = string.Template('''Answer 10 keywords related to this word.
+Keywords should not contain NG words.
+Answer according to the format.
+Keywords should be Japanese.
 
-# word: $WORD
+# this word: $WORD
 
 # NG words: $NG_WORD
 
 # format: Python list style with single quotation
-
-Anser:
 ''')
 
 def association_words(word, temp, NG_words=[""]):
