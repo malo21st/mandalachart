@@ -70,14 +70,15 @@ def association_words(word, temp, NG_words=[""]):
                     'NG_WORD': str([NG_words])[1:-1]
                  })
     
-    response = openai.Completion.create(
-        model="text-davinci-003",
-        prompt=prompt_txt,
+    prompt_lst = [
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": request_txt}
+    ]
+    
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=prompt_lst,
         temperature=temp,
-        max_tokens=500,
-        top_p=1.0,
-        frequency_penalty=0.8,
-        presence_penalty=0.0
     )
     res = response.choices[0].text
     result = res.replace("’", "'").replace("‘", "'").replace(";", "")
