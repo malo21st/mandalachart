@@ -54,33 +54,36 @@ SVG_FRAME = string.Template('''<g transform="translate($x,$y)">
 ''')
 
 # API PROMPT
-PROMPT = string.Template('''Answer 10 japanese keywords without NG words that you associate with this word. Answer should be Japanese:
+PROMPT = string.Template('''
+Answer 10 japanese keywords without NG words that you associate with this word.
+Keywords should not contain NG words.
+Answer according to the format.
+Keywords should be Japanese.
 
 # word: $WORD
 
 # NG words: $NG_WORD
 
 # format: Python list style with single quotation
-
-Anser:
 ''')
 
 def association_words(word, temp, NG_words=[""]):
-    prompt_txt = PROMPT.safe_substitute({
+    request_txt = PROMPT.safe_substitute({
                     'WORD': word,
                     'NG_WORD': str([NG_words])[1:-1]
                  })
     
-    response = openai.Completion.create(
-        model="text-davinci-003",
-        prompt=prompt_txt,
+    prompt_lst = [
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": request_txt}
+    ]
+    
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=prompt_lst,
         temperature=temp,
-        max_tokens=500,
-        top_p=1.0,
-        frequency_penalty=0.8,
-        presence_penalty=0.0
     )
-    res = response.choices[0].text
+    res = response.choices[0]['message']['content']
     result = res.replace("’", "'").replace("‘", "'").replace(";", "")
     return eval(result)
 
