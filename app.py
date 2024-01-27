@@ -1,6 +1,6 @@
 import streamlit as st
 import streamlit.components.v1 as components
-import openai
+from openai import OpenAI
 import string
 import time
 
@@ -11,6 +11,7 @@ st.set_page_config(
 
 # OPEN AI API KEY
 openai.api_key = st.secrets['api_key']
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 # Mandal Chart Layout
 ROW, COL, UNIT = 9, 9, 80
@@ -55,14 +56,14 @@ SVG_FRAME = string.Template('''<g transform="translate($x,$y)">
 # API PROMPT
 PROMPT = string.Template('''Answer 10 keywords related to this word.
 Keywords should not contain NG words.
-Answer according to the format.
+Answer according to json format.
 Keywords should be Japanese.
 
 # this word: $WORD
 
 # NG words: $NG_WORD
 
-# format: Python list style with single quotation
+# format: {"word_list": ["*", "*", ..., "*"]}
 ''')
 
 def association_words(word, temp, NG_words=[""]):
@@ -76,14 +77,15 @@ def association_words(word, temp, NG_words=[""]):
         {"role": "user", "content": request_txt}
     ]
     
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-3.5-turbo",
+        response_format={ "type": "json_object" },
         messages=prompt_lst,
         temperature=temp,
     )
-    res = response.choices[0]['message']['content']
-    result = res.replace("’", "'").replace("‘", "'").replace(";", "")
-    return eval(result)
+    res = json.loads(response_1.choices[0].message.content)
+    result = res["word_list"] # .replace("’", "'").replace("‘", "'").replace(";", "")
+    return result #eval(result)
 
 def create_mandalachart(theme, type_AI):
 # AI association word
