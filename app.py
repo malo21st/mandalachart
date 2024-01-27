@@ -77,7 +77,7 @@ def association_words(word, temp, NG_words=[""]):
     ]
     
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-3.5-turbo-1106",
         response_format={ "type": "json_object" },
         messages=prompt_lst,
         temperature=temp,
