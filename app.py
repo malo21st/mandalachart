@@ -5,11 +5,6 @@ import string
 import time
 import json
 
-st.set_page_config(
-    page_title = "ＡＩマンダラート",
-#     page_icon = Image.open("favicon.png")
-)
-
 # OPEN AI CLIENT
 client = OpenAI(api_key=st.secrets['api_key'])
 
@@ -66,26 +61,24 @@ Keywords should be Japanese.
 # format: {"word_list": ["*", "*", ..., "*"]}
 ''')
 
+##########
+# model
+##########
 def association_words(word, temp, NG_words=[""]):
     request_txt = PROMPT.safe_substitute({
                     'WORD': word,
                     'NG_WORD': str([NG_words])[1:-1]
                  })
     
-    prompt_lst = [
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": request_txt}
-    ]
-    
     response = client.chat.completions.create(
         model="gpt-3.5-turbo-1106",
         response_format={ "type": "json_object" },
-        messages=prompt_lst,
+        messages=[{"role": "user", "content": request_txt}],
         temperature=temp,
     )
     res = json.loads(response.choices[0].message.content)
-    result = res["word_list"] # .replace("’", "'").replace("‘", "'").replace(";", "")
-    return result #eval(result)
+    result = res["word_list"]
+    return result
 
 def create_mandalachart(theme, type_AI):
 # AI association word
@@ -114,7 +107,14 @@ def create_mandalachart(theme, type_AI):
     svg += '</svg>'
     return svg
 
-# layout
+######################
+# layout / control
+######################
+st.set_page_config(
+    page_title = "ＡＩマンダラート",
+#     page_icon = Image.open("favicon.png")
+)
+
 st.header("ＡＩが創るマンダラート")
 
 theme = st.text_input("**お題を入力してください :**")
