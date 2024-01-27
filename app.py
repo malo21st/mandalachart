@@ -85,7 +85,7 @@ def create_mandalachart(theme, type_AI):
     NG_list += words[:]
     for word in words:
         time.sleep(5)
-        ass_words = association_words(word, temp, NG_list)[:8]
+        ass_words = association_words(f"{theme} {word}", temp, NG_list)[:8]
         words_dic[word] = ass_words
         NG_list += ass_words
     # data arrange dict => list 9 blocks(3*3)
