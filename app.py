@@ -3,6 +3,7 @@ import streamlit.components.v1 as components
 from openai import OpenAI
 import string
 import time
+import json
 
 st.set_page_config(
     page_title = "ＡＩマンダラート",
