@@ -49,23 +49,20 @@ SVG_FRAME = string.Template('''<g transform="translate($x,$y)">
 ''')
 
 # API PROMPT
-PROMPT = string.Template('''Answer 10 keywords related to this word.
-Keywords should not contain NG words.
-Answer according to json format.
-Keywords should be Japanese.
-
-# this word: $WORD
-
-# NG words: $NG_WORD
-
-# format: {"word_list": ["*", "*", ..., "*"]}
+PROMPT = string.Template('''
+# Answer 10 keywords related to Theme word. Keywords should be Japanese.
+## Theme word: $WORD
+# Keywords should not contain NG words.
+## NG words: $NG_WORD
+# Answer according to json format.
+## format: {"word_list": ["*", "*", ..., "*"]}
 ''')
 
 ##########
 # model
 ##########
 def association_words(word, temp, NG_words=[""]):
-    request_txt = PROMPT.safe_substitute({
+    prompt_txt = PROMPT.safe_substitute({
                     'WORD': word,
                     'NG_WORD': str([NG_words])[1:-1]
                  })
@@ -73,7 +70,7 @@ def association_words(word, temp, NG_words=[""]):
     response = client.chat.completions.create(
         model="gpt-3.5-turbo-1106",
         response_format={ "type": "json_object" },
-        messages=[{"role": "user", "content": request_txt}],
+        messages=[{"role": "user", "content": prompt_txt}],
         temperature=temp,
     )
     res = json.loads(response.choices[0].message.content)
