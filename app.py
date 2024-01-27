@@ -83,7 +83,7 @@ def association_words(word, temp, NG_words=[""]):
         messages=prompt_lst,
         temperature=temp,
     )
-    res = json.loads(response_1.choices[0].message.content)
+    res = json.loads(response.choices[0].message.content)
     result = res["word_list"] # .replace("’", "'").replace("‘", "'").replace(";", "")
     return result #eval(result)
 
