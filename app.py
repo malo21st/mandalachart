@@ -9,9 +9,8 @@ st.set_page_config(
 #     page_icon = Image.open("favicon.png")
 )
 
-# OPEN AI API KEY
-openai.api_key = st.secrets['api_key']
-client = OpenAI(api_key=OPENAI_API_KEY)
+# OPEN AI CLIENT
+client = OpenAI(api_key=st.secrets['api_key'])
 
 # Mandal Chart Layout
 ROW, COL, UNIT = 9, 9, 80
