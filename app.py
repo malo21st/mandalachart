@@ -8,6 +8,12 @@ import json
 # OPEN AI CLIENT
 client = OpenAI(api_key=st.secrets['api_key'])
 
+# Initialization
+if 'is_contents' not in st.session_state:
+    st.session_state['is_contents'] = False
+    st.session_state['theme'] = ""
+    st.session_state['mandala_svg'] = ""
+
 # Mandal Chart Layout
 ROW, COL, UNIT = 9, 9, 80
 UNIT3 = UNIT * 3                                    # ROW
@@ -114,7 +120,7 @@ st.set_page_config(
 
 st.header("ＡＩが創るマンダラート")
 
-theme = st.text_input("**お題を入力してください :**")
+theme = st.text_input("**お題を入力してください :**", value=st.session_state['theme'])
 type_AI = st.radio("**どのＡＩに創造させますか :**",
                    ('きっちり', 'まぁまぁ', 'クリエイティブ'), horizontal=True)
 
@@ -126,6 +132,11 @@ if st.button('**マンダラート創造**') and theme:
     except Exception as err:
         st.error(f'エラーが発生しました。　　再度お試し下さい。')
         st.error(f'{err=}, {type(err)=}')
+        
+    st.session_state['is_contents'] = True
+    st.session_state['theme'] = theme
+    st.session_state['mandala_svg'] = mandala_svg
+
     if mandala_svg:
         st.download_button(
             label="Download data as SVG",
@@ -133,3 +144,6 @@ if st.button('**マンダラート創造**') and theme:
             file_name=f'{theme}.svg',
             mime='image/svg+xml',
         )
+
+if st.session_state["is_content"]:
+    components.html(st.session_state["mandala_svg"], height=720)
