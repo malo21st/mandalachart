@@ -142,6 +142,6 @@ if st.session_state["is_contents"]:
     st.download_button(
         label="Download data as SVG",
         data=st.session_state['mandala_svg'],
-        file_name=f'{st.session_state['theme']}.svg',
+        file_name=f'{st.session_state["theme"]}.svg',
         mime='image/svg+xml',
     )
