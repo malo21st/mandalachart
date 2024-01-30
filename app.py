@@ -128,22 +128,18 @@ if st.button('**マンダラート創造**') and theme:
     try:
         with st.spinner("マンダラート創造中・・・　数分程度お待ちください。"):
             mandala_svg = create_mandalachart(theme, type_AI)
-            # components.html(mandala_svg, height=720)
+        st.session_state['is_contents'] = True
+        st.session_state['theme'] = theme
+        st.session_state['mandala_svg'] = mandala_svg
     except Exception as err:
         st.error(f'エラーが発生しました。　　再度お試し下さい。')
-        st.error(f'{err=}, {type(err)=}')
-        
-    st.session_state['is_contents'] = True
-    st.session_state['theme'] = theme
-    st.session_state['mandala_svg'] = mandala_svg
-
-    if mandala_svg:
-        st.download_button(
-            label="Download data as SVG",
-            data=mandala_svg,
-            file_name=f'{theme}.svg',
-            mime='image/svg+xml',
-        )
+        st.error(f'{err=}, {type(err)=}')        
 
 if st.session_state["is_contents"]:
     components.html(st.session_state["mandala_svg"], height=720)
+    st.download_button(
+        label="Download data as SVG",
+        data=mandala_svg,
+        file_name=f'{theme}.svg',
+        mime='image/svg+xml',
+    )
