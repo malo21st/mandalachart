@@ -126,3 +126,10 @@ if st.button('**マンダラート創造**') and theme:
     except Exception as err:
         st.error(f'エラーが発生しました。　　再度お試し下さい。')
         st.error(f'{err=}, {type(err)=}')
+    if mandala_svg:
+        st.download_button(
+            label="Download data as SVG",
+            data=mandala_svg,
+            file_name=f'{theme}.svg',
+            mime='image/svg+xml',
+        )
