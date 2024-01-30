@@ -128,7 +128,7 @@ if st.button('**マンダラート創造**') and theme:
     try:
         with st.spinner("マンダラート創造中・・・　数分程度お待ちください。"):
             mandala_svg = create_mandalachart(theme, type_AI)
-            components.html(mandala_svg, height=720)
+            # components.html(mandala_svg, height=720)
     except Exception as err:
         st.error(f'エラーが発生しました。　　再度お試し下さい。')
         st.error(f'{err=}, {type(err)=}')
