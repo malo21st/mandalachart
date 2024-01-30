@@ -141,7 +141,7 @@ if st.session_state["is_contents"]:
     components.html(st.session_state["mandala_svg"], height=720)
     st.download_button(
         label="Download data as SVG",
-        data=mandala_svg,
-        file_name=f'{theme}.svg',
+        data=st.session_state['mandala_svg'],
+        file_name=f'{st.session_state['theme']}.svg',
         mime='image/svg+xml',
     )
