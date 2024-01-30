@@ -125,13 +125,14 @@ type_AI = st.radio("**どのＡＩに創造させますか :**",
                    ('きっちり', 'まぁまぁ', 'クリエイティブ'), horizontal=True)
 
 if st.button('**マンダラート創造**') and theme:
+    st.session_state['is_contents'] = True
+    st.session_state['theme'] = theme
     try:
         with st.spinner("マンダラート創造中・・・　数分程度お待ちください。"):
             mandala_svg = create_mandalachart(theme, type_AI)
-        st.session_state['is_contents'] = True
-        st.session_state['theme'] = theme
         st.session_state['mandala_svg'] = mandala_svg
     except Exception as err:
+        st.session_state['mandala_svg'] = ""
         st.error(f'エラーが発生しました。　　再度お試し下さい。')
         st.error(f'{err=}, {type(err)=}')        
 
