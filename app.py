@@ -145,5 +145,5 @@ if st.button('**マンダラート創造**') and theme:
             mime='image/svg+xml',
         )
 
-if st.session_state["is_content"]:
+if st.session_state["is_contents"]:
     components.html(st.session_state["mandala_svg"], height=720)
