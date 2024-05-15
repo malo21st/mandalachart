@@ -33,7 +33,7 @@ COLOR = {(4, 4): C1, (3, 3): C2, (3, 4): C2, (3, 5): C2, (4, 3): C2, (4, 5): C2,
          (1, 1): C3, (1, 4): C3, (1, 7): C3, (4, 1): C3, (4, 7): C3, (7, 1): C3, (7, 4): C3, (7, 7): C3}
 
 # AI type : temperature
-AI_TYPE = {'きっちり': 0.0, 'まぁまぁ': 0.5, 'クリエイティブ': 0.9}
+AI_TYPE = {'きっちり': 0.0, 'まぁまぁ': 0.6, 'クリエイティブ': 1.2}
 
 # SVG TEMPLATE
 SVG_HEADER = '''<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 720 720">
